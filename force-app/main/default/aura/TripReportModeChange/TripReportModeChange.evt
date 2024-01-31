@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event template">
+    <aura:attribute name="mode" type="String" />
+    <aura:attribute name="Id" type="String" />
+</aura:event>

@@ -1,0 +1,17 @@
+<aura:component >
+    <aura:attribute name="student" type="Contact" access="public" default="{'sobjectType' : 'Contact', 'Name' : 'Arvindh S', 'PhotoUrl': 'services/images/photo/0032v00003piFBXAA2' }" 
+                    description="Contact object with fields sobjectType, Id, Name, PhotoUrl"/>
+    <aura:attribute name="selected" type="Boolean" access="public" default="false" 
+                    description="Set to true to persist blue border"/>
+    <aura:registerEvent name="onStudentSelected" type="c:StudentSelected" />
+    
+    <lightning:button onclick="{!c.onStudentClick}" class="{! v.selected ? 'tile selected' : 'tile' }">
+        
+        <div class="innertile" style="{! 'background-image:url(' + v.student.PhotoUrl + ')'}" >
+            <div class="lower-third">
+                <h1 class="slds-truncate">{!v.student.Name}</h1>
+            </div>
+        </div>  
+        
+    </lightning:button>
+</aura:component>

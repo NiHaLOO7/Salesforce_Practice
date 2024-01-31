@@ -1,0 +1,60 @@
+<aura:component extends="c:Base"  implements="force:appHostable,flexipage:availableForAllPageTypes" access="global" >
+    
+    
+    <aura:attribute name="viewMode" type="String" access="private" default="students"/>
+    <aura:attribute name="certificationId" type="Id" access="private" />
+    <aura:attribute name="certificationLabel" type="String" access="private" />
+    
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:handler name="onnotification" 
+                  event="c:Notification" 
+                  action="{!c.onNotification}" />
+    
+    <aura:handler name="loading" event="c:loading" action="{!c.spinnerShow}" />
+    <aura:handler name="doneloading" event="c:doneloading" action="{!c.spinnerHide}" />
+    
+    <lightning:layout horizontalAlign="space" multipleRows="true">
+        
+        <lightning:layoutItem padding="around-small" largeDeviceSize="2" mediumDeviceSize="3" smallDeviceSize="12"  size="12">
+            <c:AwInstructorsNavigation onselect="{!c.onNavSelect}" />
+        </lightning:layoutItem>
+        
+        <aura:if isTrue="{!v.viewMode == 'students'}">
+            
+            <lightning:layoutItem flexibility="auto" padding="around-small" largeDeviceSize="7" mediumDeviceSize="5" smallDeviceSize="12" size="6">
+                <c:StudentBrowser />
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem flexibility="auto" padding="around-small" largeDeviceSize="3" mediumDeviceSize="4" smallDeviceSize="12" size="4">
+                <c:StudentDetail />
+            </lightning:layoutItem>
+            
+            <aura:set attribute="else">
+                <lightning:layoutItem largeDeviceSize="10" mediumDeviceSize="9" smallDeviceSize="12"  padding="around-small" size="10">             
+                    <aura:if isTrue="{!v.viewMode == 'tripreports'}">
+                        
+                        <c:TripReports />   
+                        
+                        <aura:set attribute="else">
+                            
+                            <c:CertificationStudentList label="{!v.certificationLabel}" 
+                                                        certificationId="{!v.certificationId}" 
+                                                        />
+                            
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+            </aura:set>
+            
+        </aura:if>  
+        
+    </lightning:layout>
+    
+    <div aura:id="modalspinner" class="slds-align--absolute-center slds-hide" >
+        <lightning:spinner variant="brand" size="large" />
+    </div>
+    
+</aura:component>

@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Toast or Notification Event" >
+    <aura:attribute name="type" type="String" />
+    <aura:attribute name="config" type="Object" />
+</aura:event>

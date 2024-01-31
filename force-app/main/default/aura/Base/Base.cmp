@@ -1,0 +1,8 @@
+<aura:component abstract="true">
+    <aura:registerEvent name="onnotification" type="c:Notification" />
+    <aura:registerEvent name="loading" type="c:loading" />
+    <aura:registerEvent name="doneloading" type="c:doneloading" />
+    
+    {!v.body}
+    
+</aura:component>

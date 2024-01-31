@@ -1,0 +1,20 @@
+<aura:component >
+    <aura:attribute name="studentHistory" type="Course_Attendee__c[]" access="public" />
+    <ul class="slds-has-dividers_bottom-space">
+        <aura:iteration items="{!v.studentHistory}" var="historyItem">
+            <li class="slds-item">
+                <lightning:tile aura:id="historyTile">
+                    <aura:set attribute="media">
+                        <lightning:icon iconName="standard:note"/>
+                    </aura:set>
+                    <ul>
+                        <li class="slds-item">{!historyItem.Course_Delivery__r.Start_Date__c} - {!historyItem.Course_Delivery__r.Course__r.Name }</li>
+                        <li class="slds-item">
+                            <lightning:formattedRichText value="{!historyItem.InstructorNotes__c}"/>
+                        </li>
+                    </ul>
+                </lightning:tile>
+            </li> 
+        </aura:iteration>
+    </ul>
+</aura:component>

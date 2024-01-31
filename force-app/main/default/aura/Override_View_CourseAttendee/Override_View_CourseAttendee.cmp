@@ -1,0 +1,57 @@
+<aura:component extends="c:Base" 
+                implements="flexipage:availableForRecordHome,lightning:actionOverride,force:hasRecordId,force:hasSObjectName" 
+                access="global"
+                controller="StudentDetail">
+    
+    <aura:attribute name="recordId" access="global" type="String" />
+    <aura:attribute name="history" access="private" type="Object[]" />
+    <aura:attribute name="courseDeliveryId" access="private" type="String" />
+    <aura:attribute name="contact" access="public" type="Contact" />
+    <aura:attribute name="recordError" access="public" type="String" />
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.contact}"
+                      targetError="{!v.recordError}"
+                      fields="Student__r.Id,Student__r.Name,Student__r.Email,Student__r.Phone,Student__r.Description,Student__r.PhotoUrl,Course_Delivery__r.Start_Date__c,Course_Delivery__r.Course__r.Name,Course_Delivery__r.Location__c"
+                      recordUpdated="{!c.handleRecordUpdated}"
+                      />
+    
+    <lightning:card >
+        <aura:set attribute="title">
+            {!v.contact.Course_Delivery__r.Course__r.Name} on {!v.contact.Course_Delivery__r.Start_Date__c}
+        </aura:set>
+        <aura:set attribute="actions">   
+            <lightning:button label="Edit" onclick="{! c.onEdit }"/>  		
+        </aura:set>
+        
+        <img src="{!v.contact.Student__r.PhotoUrl}" style="float:left; margin-right: 5px"/>
+        {!v.contact.Student__r.Name}<br />
+        <lightning:formattedEmail value="{!v.contact.Student__r.Email}" /> 
+        <br />
+        <lightning:formattedPhone value="{!v.contact.Student__r.Phone}"/> 
+        
+        <p class="slds-p-horizontal--small">
+            {!v.contact.Student__r.Description}
+        </p>
+    </lightning:card>
+    <br />
+    <lightning:tabset >
+        <lightning:tab label="History">    
+            <div class="slds-p-around_xx-small">
+                <c:StudentHistory studentHistory="{!v.history}" />
+            </div>
+        </lightning:tab>
+        <!--
+        <lightning:tab label="Edit Notes">
+            <div class="slds-p-around_xx-small">
+                <c:EditStudentNote history="{!v.history}" 
+                                   courseDeliveryId="{!v.courseDeliveryId}" 
+                                   contactId="{!v.contactId}" />
+            </div>
+        </lightning:tab>
+  -->
+    </lightning:tabset>
+    
+    
+</aura:component>

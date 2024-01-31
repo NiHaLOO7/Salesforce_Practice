@@ -1,0 +1,30 @@
+<!-- <template>
+    <lightning-layout>
+        <lightning-layout-item>
+            <lightning-button label="Previous" icon-name="utility:chevronleft" 
+            onclick={handlePrevious}></lightning-button>
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="grow">
+        </lightning-layout-item>
+        <lightning-layout-item>
+            <lightning-button label="Next" icon-name="utility:chevronright"
+              onclick={handleNext}></lightning-button>
+        </lightning-layout-item>
+    </lightning-layout>
+</template> -->
+
+<template>
+    <span class="info slds-float_left">Viewing {startrange}-{endrange} of {totalrecords}</span>
+    
+    <div class="container slds-float_right">
+        <p>
+            <lightning-button-icon  size="small" class="slds-p-around_small" variant="bare" disabled={disableleftarrow} onclick={handlePrevious} icon-name="utility:chevronleft"></lightning-button-icon >
+            <span>
+                <template for:each={pageList} for:item="p" for:index="index">
+                    <lightning-button key={p} label={p} onclick={handleClick} data-index ={index}></lightning-button>
+                </template>
+            </span>
+            <span><lightning-button-icon  size="small" class="slds-p-around_small" variant="bare" onclick={handleNext} disabled={disablerightarrow} icon-name="utility:chevronright"></lightning-button-icon ></span>
+        </p>
+    </div>
+</template>

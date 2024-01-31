@@ -1,0 +1,7 @@
+<aura:component >
+    
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    <lightning:button name="cancel" label="Cancel" onclick="{!c.onCancel}" />
+    <lightning:button name="save" label="Save" onclick="{!c.onSave}" />
+    
+</aura:component>

@@ -1,0 +1,24 @@
+<aura:component>
+    <aura:attribute name="students" type="Contact[]" access="public" />
+    <aura:attribute name="selectedStudentId" type="Id" access="public" />
+    
+    <lightning:layout horizontalAlign="center" multipleRows="true">
+        
+        <aura:if isTrue="{!not(empty(v.students))}">
+            
+            <aura:iteration items="{!v.students}" var="student" >
+                <lightning:layoutItem class="slds-align_absolute-center" padding="around-small" size="12" smallDeviceSize="6" mediumDeviceSize="4" largeDeviceSize="3">
+                    <c:StudentTile student="{#student}" selected="{!v.selectedStudentId == student.Id ? true : false}" />
+                </lightning:layoutItem>
+            </aura:iteration>
+            
+            <aura:set attribute="else">
+                <lightning:layoutItem class="slds-align_absolute-center" flexibility="auto" padding="around-small">   
+                    <h2 value="No students found." />
+                </lightning:layoutItem>
+            </aura:set>
+            
+        </aura:if>
+    </lightning:layout>
+    
+</aura:component>

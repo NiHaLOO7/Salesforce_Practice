@@ -1,0 +1,52 @@
+<aura:component extends="c:Base">
+    <aura:attribute name="courseAttendees" type="Course_Attendee__c[]" access="public" />
+    <aura:attribute name="selectCourseAttendeeValue" type="String" default="" access="private" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="courseAttendeeRecord" type="Object" />
+    <aura:attribute name="recordError" type="String" />
+    <aura:registerEvent name="studentNoteChangeEvent" type="c:StudentNoteChanged"/>
+    
+    <lightning:card title="Select course attendee" >
+        <div class="slds-p-left_small slds-p-right_small">
+            <lightning:select name="selectCourseAttendee" label="Select course attendee" variant="label-hidden" value="{!v.selectCourseAttendeeValue}" onchange="{!c.handleCourseAttendeeChange}">
+                <option value="">Select</option>
+                <aura:iteration items="{!v.courseAttendees}" var="courseAttendee">
+                    <option value="{!courseAttendee.Id}" selected="{!courseAttendee.Id == v.selectCourseAttendeeValue}">
+                        {!courseAttendee.Course_Delivery__r.Start_Date__c} - {!courseAttendee.Course_Delivery__r.Course__r.Name }
+                    </option>
+                </aura:iteration>
+            </lightning:select> 
+            
+            <aura:if isTrue="{!not(empty(v.selectCourseAttendeeValue))}">
+                <force:recordData aura:id="recordEditor"
+                                  fields="InstructorNotes__c"
+                                  recordId="{!v.selectCourseAttendeeValue}"
+                                  targetError="{!v.recordError}"
+                                  targetRecord="{!v.record}"
+                                  targetFields ="{!v.courseAttendeeRecord}"
+                                  mode="EDIT" />
+                
+                <div class="slds-p-top_small">
+                    <p class="slds-text-heading--small">
+                        <lightning:inputRichText title="Instructor Note" value="{!v.courseAttendeeRecord.InstructorNotes__c}" />
+                    </p>	
+                    <br/>
+                    <lightning:button label="Save" variant="brand" class="slds-align_absolute-center" onclick="{!c.saveInstructorNoteChange}" />
+                </div>
+                <br/>
+                
+                
+                <!-- Display Lightning Data Service errors, if any - Commenting this to display the error as toast message.
+            <aura:if isTrue="{!not(empty(v.recordError))}">
+                <div class="recordError">
+                    {!v.recordError}
+                </div>
+            </aura:if>
+   -->
+                
+            </aura:if>
+        </div>
+    </lightning:card>
+    
+    
+</aura:component>

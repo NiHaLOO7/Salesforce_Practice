@@ -1,0 +1,35 @@
+<aura:component extends="c:Base" controller="CertificationStudentList">
+    <aura:attribute name="contacts" type="Object[]" access="private" />
+    <aura:attribute name="columns" type="Object[]" access="private" />
+    <aura:attribute name="certificationId" type="Id" access="public" />
+    <aura:attribute name="label" type="String" access="public" default="" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.certificationId}" action="{!c.onCertificationIdChange}" />
+    
+    <lightning:card title="{!v.label + ' Certifications'}" >
+        
+        <lightning:datatable data="{!v.contacts}" 
+                             columns="{!v.columns}" 
+                             keyField="certificationHeldId"
+                             aura:id="datatable"
+                             onrowselection="{!c.onRowSelection}"
+                             />
+        
+        <aura:set attribute="actions" >
+            <lightning:buttongroup >
+                <div class="slds-p-right_x-small">
+                    <lightning:button label="Email" onclick="{!c.onCertActions}" aura:id="btnEmail" variant="brand" disabled="true" />
+                </div>
+                <div class="slds-p-right_x-small">
+                    <lightning:button label="Send Certificate" onclick="{!c.onCertActions}" aura:id="btnSendCert" variant="brand" disabled="true" />
+                </div>
+                <div class="slds-p-right_x-small">
+                    <lightning:button label="Delete" onclick="{!c.onCertActions}" aura:id="btnDelete" variant="destructive" disabled="true" />
+                </div>
+            </lightning:buttongroup>            
+        </aura:set>
+        
+    </lightning:card>
+    
+</aura:component>

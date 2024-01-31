@@ -1,0 +1,19 @@
+<aura:documentation>
+    <aura:description>
+        <p>This component renders a Contact standard object as a clickable button.</p>
+        <p>
+            Contact fields used include:
+            <ul>
+                <li>Name</li>
+                <li>PhotoUrl</li>
+            </ul>
+        </p>
+        <p>Note that social contacts must be enabled in your org for the PhotoUrl field to be available.</p>
+        
+        <p>When the button is clicked, an application event named c:StudentSelected is raised, passing the contact's Id.</p>    
+    </aura:description>
+    
+    <aura:example name="ExampleName" ref="c:ExampleStudentTile" label="Label">
+        Displays a contact photo and name, fires an application event when clicked.
+    </aura:example>
+</aura:documentation>

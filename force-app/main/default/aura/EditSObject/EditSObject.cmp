@@ -1,0 +1,6 @@
+<aura:component >
+    <aura:attribute name="Id" type="Id" required="true" />
+    
+    <force:recordEdit aura:id="edit" recordId="{!v.Id}" />
+    
+</aura:component>

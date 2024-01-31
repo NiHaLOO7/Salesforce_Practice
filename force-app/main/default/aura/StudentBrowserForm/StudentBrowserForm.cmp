@@ -1,0 +1,53 @@
+<aura:component extends="c:Base" controller="StudentBrowserForm" >
+    <aura:attribute name="instructors" type="User[]" access="PRIVATE"/>
+    <aura:attribute name="deliveries" type="object[]" access="PRIVATE"/>
+    <aura:attribute name="selectedInstructorId" type="String" access="PRIVATE"/>
+    <aura:attribute name="selectedDeliveryId" type="String" access="PRIVATE"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="onStudentFilterChange" type="c:StudentFilterChange" />
+    
+    
+    <lightning:card title="Filter Students" iconName="utility:search" >
+        
+        <lightning:layout horizontalAlign="center" verticalAlign="center">
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-p-bottom_small">
+                    <lightning:select name="instructorSelector" label="Select Instructor" variant="label-hidden" value="{!v.selectedInstructorId}" onchange="{!c.onInstructorChange}">
+                        <option value="">Select Instructor</option>
+                        <aura:iteration items="{!v.instructors}" var="instructor">
+                            <option value="{!instructor.Id}" >
+                                {!instructor.Name}
+                            </option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-p-bottom_small">
+                    <lightning:select name="deliverySelector" label="Select Delivery" variant="label-hidden" value="{!v.selectedDeliveryId}" onchange="{!c.onFilterChange}">
+                        <option value="">Select Delivery</option>
+                        <aura:iteration items="{!v.deliveries}" var="delivery">
+                            <option value="{!delivery.Id}" >
+                                {!delivery.Start_Date__c} &nbsp;
+                                {!delivery.Location__c} &nbsp;
+                                ({!delivery.Attendee_Count__c} students)
+                            </option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-p-top_xx-small">
+                    <lightning:button variant="brand" label="Add New Delivery" onclick="{! c.onAddNewDelivery }" />
+                </div>
+            </lightning:layoutItem>
+            
+        </lightning:layout>
+        
+        
+    </lightning:card>
+    
+</aura:component>

@@ -1,0 +1,26 @@
+<aura:component >
+    <aura:attribute name="mode" type="string" default="browse" />
+    <aura:attribute name="selectedTripReportId" type="String" default="" />
+    
+    <aura:if isTrue="{!v.mode == 'add' || v.mode == 'edit'}">
+        
+        <lightning:layout horizontalAlign="space" multipleRows="true">
+            
+            <lightning:layoutItem flexibility="auto" padding="around-small" largeDeviceSize="8" mediumDeviceSize="7" smallDeviceSize="12" size="6">              
+                <c:TripReportForm aura:Id="myForm" Id="{!v.selectedTripReportId}" ontripreportmodechange="{!c.onTripReportModeChange}"/>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem flexibility="auto" padding="around-small" largeDeviceSize="4" mediumDeviceSize="5" smallDeviceSize="12" size="6">
+                <ui:scrollerWrapper class="scroller">
+                    <forceChatter:feed type="groups" />
+                </ui:scrollerWrapper>       
+            </lightning:layoutItem>
+            
+        </lightning:layout>
+        
+        <aura:set attribute="else">
+            <c:TripReportBrowser ontripreportmodechange="{!c.onTripReportModeChange}"/>
+        </aura:set>
+        
+    </aura:if>
+</aura:component>

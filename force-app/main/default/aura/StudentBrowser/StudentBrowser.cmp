@@ -1,0 +1,40 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" extends="c:Base" controller="StudentBrowser">
+    <aura:attribute name="studentList" type="Contact[]" access="private" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="selectedCourseDeliveryId" type="String" access="private" default="" />
+    <aura:attribute name="selectedContactId" type="String" access="private" default="" />
+    
+    <aura:handler name="onStudentFilterChange" event="c:StudentFilterChange" action="{!c.onStudentFilterChange}" />    
+    <aura:handler name="onStudentSelected" event="c:StudentSelected" action="{!c.onStudentSelected}" />    
+    <aura:handler name="rowclick" event="c:DataGridRowClick" action="{!c.onDataGridRowClick}" />    
+    <aura:handler name="rowdblclick" event="c:DataGridRowDblClick" action="{!c.onContactEdit}" />    
+    
+    <aura:registerEvent name="broadcastStudentSelected" type="c:AwInstructorsStudentSelected" />
+    
+    <lightning:overlayLibrary aura:id="overlayLib" />
+    
+    <div class="slds-m-bottom_small">
+        <c:StudentBrowserForm onStudentFilterChange="{!c.onStudentFilterChange}"/>
+    </div>
+    
+    <lightning:tabset variant="scoped">
+        
+        <lightning:tab label="Gallery">
+            <ui:scrollerWrapper class="scrollerSize">
+                <c:StudentTiles students="{!v.studentList}" selectedStudentId="{!v.selectedContactId}" />
+            </ui:scrollerWrapper>
+        </lightning:tab>
+        
+        <lightning:tab label="Grid">
+            <ui:scrollerWrapper class="scrollerSize">
+                <c:DataGrid aura:id="datagrid" data="{!v.studentList}" pkField="Id">
+                    <c:DataGridColumn fieldName="Name" label="Name" />
+                    <c:DataGridColumn fieldName="Title" label="Title" hidden="true" />
+                    <c:DataGridColumn fieldName="Phone" label="Phone" type="phone" />
+                    <c:DataGridColumn fieldName="Email" label="Email" type="email" />
+                </c:DataGrid>
+            </ui:scrollerWrapper>
+        </lightning:tab>
+        
+    </lightning:tabset>
+</aura:component>

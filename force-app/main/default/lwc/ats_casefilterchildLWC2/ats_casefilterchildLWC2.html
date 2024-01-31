@@ -1,0 +1,201 @@
+<template>
+    <lightning-card >
+        
+        <template if:true={actionsDisabled}>
+        <div align="right"> 
+            <lightning-file-upload name="Add Attachment" accept={acceptedFormats} record-id={recordId} onuploadfinished={handleUploadFinished} multiple></lightning-file-upload>
+        </div>
+        </template>
+
+        <div class="slds-p-around_small " align="left">
+                  
+            <lightning-button label="Summary" class="slds-is-selected" variant="brand-outline" onclick={handleSummaryButton} style='margin-right:10px'></lightning-button>
+            <lightning-button label="Related Actions" variant="brand-outline" onclick={handleRelatedButton} style='margin-right:10px'></lightning-button>          
+            <template if:true={actionsDisabled}>
+            <lightning-button label="Change Category" variant="brand-outline" style='margin-right:10px'></lightning-button>   
+            </template>
+        </div>
+        <div class="slds-box"><strong> <h1 style="font-size:20px;">{title} </h1> </strong></div>
+
+        <template if:true={hideCancelButton}>
+            <template if:true={inProgressCheck}>
+        <div class="slds-p-around_small " align="right">
+        <lightning-button label="Cancel Case" variant="brand-outline" align="right" style='margin-right:10px' onclick={handleCancelCase}></lightning-button>
+        </div> 
+            </template>  
+        </template>
+
+   <template if:true={cancelCase}>
+    <div class="slds-p-around_medium">
+    <lightning-record-edit-form object-api-name="Case" record-id={recordId}>
+        <lightning-input-field class="slds-hide"  value={statusValue} field-name="Status"></lightning-input-field>
+    <label>*Case Cancel Commnets</label>
+    <lightning-input-field variant="label-hidden" value={commentsVal} onchange={handleChangeInput} field-name="Comments__c"></lightning-input-field>
+    <div class="slds-var-m-top_medium">
+         <lightning-button variant="brand" class="slds-float_right" disabled={submitDisabled} label="Submit" onclick={showModalBox}>
+        </lightning-button>
+    </div>
+    
+    <template if:true={isShowModal}>
+
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                      
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+            <p align="center"> Are you sure you want to cancel the case?</p>
+            </div>
+            <div class="slds-modal__footer">
+            <button class="slds-button slds-button_neutral slds-float_left" onclick={handleModalNoButton} >No</button>
+            <button class="slds-button slds-button_brand"  onclick={handleModalYesButton} >Yes</button>
+            </div>
+            </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+
+
+    </template>
+    </lightning-record-edit-form>
+</div> 
+   </template>
+   
+   
+        <lightning-accordion allow-multiple-sections-open
+            active-section-name={activeSections}>
+                <lightning-accordion-section name="A" label="Case Details">
+                    <div class="slds-p-around_medium">
+                    <lightning-record-view-form record-id={recordId} object-api-name="Case">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2">
+                             <!--   <lightning-output-field field-name="Product__c"></lightning-output-field>
+                              -->  <lightning-output-field field-name="Partner_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="Account_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="TSYS_External_Account_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="Party_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="Partner_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="Name"></lightning-output-field>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                              <!--  <lightning-output-field field-name="Product__c"></lightning-output-field>
+                                --><lightning-output-field field-name="Status"></lightning-output-field>
+                                <lightning-output-field field-name="Case_Assign_User_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="CreatedDate"></lightning-output-field>
+                                <lightning-output-field field-name="Update_Time__c"></lightning-output-field>
+                                <lightning-output-field field-name="Status"></lightning-output-field>
+                            
+                            </div>         
+                           
+                        </div>
+                    </lightning-record-view-form>
+                    </div>
+                </lightning-accordion-section>
+                <template if:true={actionsDisabled}>
+                <div class="slds-p-around_small " align="left">
+                <lightning-button label="Self Assign" variant="brand-outline" align="left" style='margin-right:10px' onclick={handleSelfAssign}></lightning-button>
+                </div>
+                </template>
+                <lightning-accordion-section name="B" label="Case Input">
+                    <div class="slds-p-around_medium">
+                        <lightning-datatable
+                            hide-checkbox-column="true"
+                            key-field="Id"
+                            data={casesData}
+                            columns={columnsInput}>
+                        </lightning-datatable>
+                    </div>
+                </lightning-accordion-section>
+
+                <template if:true={actionsDisabled}>
+                    <template if:true={inProgressCheck}>
+                <lightning-accordion-section  name="C" label="Case Actions">
+                    <div class="slds-p-around_medium">
+                    <lightning-record-edit-form object-api-name="Case" data-id="caseActionsID" record-id={recordId} onsuccess={handleSuccess}>
+                        <lightning-input-field  class="slds-hide" field-name="Status"></lightning-input-field>
+                        <label>Case Action</label>
+                        <lightning-input-field variant="label-hidden"   field-name="User_Action__c"></lightning-input-field>
+                        <label>Pend Until Date</label>
+                        <lightning-input-field variant="label-hidden"  field-name="Pending_Until_DT__c"></lightning-input-field>
+   
+                    </lightning-record-edit-form>
+
+                    <lightning-record-edit-form
+                        object-api-name="Case_Detail__c"
+                        data-id="caseDetailsActionsID">
+                        <label>*Case Action Comment </label>
+                        <lightning-input-field variant="label-hidden" data-id="commInputId" required field-name="Comments__c">
+                        </lightning-input-field>
+                       
+                            <lightning-input-field class="slds-hide" variant="label-hidden" value={recordId}  field-name="Case__c">
+                           
+                        </lightning-input-field>
+                       </lightning-record-edit-form>
+                       <div class="slds-p-around_medium">
+                    <lightning-button variant="brand" class="slds-float_right" label="Submit" onclick={submitCaseActions}>
+                    </lightning-button>
+                </div>
+                </div>
+                </lightning-accordion-section> 
+                </template>
+                </template>
+                <lightning-accordion-section name="D" label="Comments">
+                    <div class="slds-p-around_medium">
+                        <lightning-datatable
+                            hide-checkbox-column="true"
+                            key-field="Id"
+                            data={caseDeatils}
+                            columns={columnsComments}>
+                        </lightning-datatable>
+                    </div>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="E" label="Attachments">
+                    <div class="slds-p-around_medium">
+                        <template if:true={actionsDisabled}>
+                        <lightning-datatable
+                            key-field="Id"
+                            data={caseDocs}
+                            data-id="overview"
+                            columns={columnsDocuments}>
+                        </lightning-datatable>  
+                         <div class="slds-p-around_medium" align="right">
+                        <lightning-button   variant="Neutral"
+                            label="Delete"
+                            onclick={getSelectedRec}  >
+                        </lightning-button>                        
+                    </div>  
+                </template>
+                
+                <template if:false={actionsDisabled}>
+                    <lightning-datatable
+                        key-field="Id"
+                        hide-checkbox-column
+                        data={caseDocs}
+                        data-id="overview"
+                        columns={columnsDocuments}>
+                    </lightning-datatable>  
+                </template>
+               <template if:true={msg}>
+                    <Div align="center" > <h1 style="color: red;"> No attachments available </h1> </Div>
+                </template>
+                </div>
+             </lightning-accordion-section>
+
+             <lightning-accordion-section name="F" label="Event History">
+                <div class="slds-p-around_xx-small">    
+                <lightning-datatable
+                    hide-checkbox-column="true"
+                    key-field="Id"
+                    data={caseEvents}
+                    columns={columnsEvents}>
+                </lightning-datatable>
+                </div>
+            </lightning-accordion-section>
+
+            </lightning-accordion>
+     
+            <div class="slds-col slds-align_absolute-center">
+              <lightning-button class="slds-m-top_small slds-m-left_small" label="Done" variant="brand" onclick={handleDone}></lightning-button>
+            </div>
+
+    </lightning-card>
+</template>

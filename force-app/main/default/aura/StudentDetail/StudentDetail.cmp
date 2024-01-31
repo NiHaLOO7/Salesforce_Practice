@@ -1,0 +1,66 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" extends="c:Base" controller="StudentDetail" >
+    <aura:attribute name="contactId" access="public" type="String" default="" />
+    <!--<aura:attribute name="courseDeliveyId" access="public" type="String" />-->
+    <aura:attribute name="contact" access="public" type="Contact" />
+    <aura:attribute name="recordError" access="private" type="String" />
+    <aura:attribute name="history" type="Course_Attendee__c[]" access="public" />
+    <aura:attribute name="selTabId" type="String" default="historyTab" />
+    <aura:handler name="studentNoteChangeEvent" event="c:StudentNoteChanged" action="{!c.handleStudentNoteChangedEvent}" />
+    
+    <aura:handler event="c:AwInstructorsStudentSelected" action="{!c.onStudentSelected}" />
+    
+    <aura:if isTrue="{!not(empty(v.contactId))}" >    
+        <force:recordData aura:id="recordLoader"
+                          recordId="{!v.contactId}"
+                          targetError="{!v.recordError}"
+                          targetFields ="{!v.contact}"
+                          fields="Name,Email,Phone,Description"
+                          />
+        
+        <lightning:card iconName="standard:contact" title="{!v.contact.Name}" >
+            <div class="slds-p-horizontal--small">
+                <p class="slds-text-heading--small">
+                    <lightning:formattedEmail title="Email" value="{!v.contact.Email}" /></p>
+                <p class="slds-text-heading--small">
+                    <lightning:formattedPhone title="Phone" value="{!v.contact.Phone}" /></p>
+                <p class="slds-text-heading--small">
+                    <lightning:formattedText title="Description" value="{!v.contact.Description}" /></p>
+                
+                <c:StudentDetailAccordion courses="{!v.history}" contactId="{!v.contactId}" />
+                
+                <br/>
+                <lightning:button class="slds-align_absolute-center" label="Details" variant="brand" onclick="{!c.navigateToSObject}" />
+            </div>
+        </lightning:card> 
+        
+        
+        <!-- Display Lightning Data Service errors, if any -->
+        <aura:if isTrue="{!not(empty(v.recordError))}">
+            <div class="recordError">
+                {!v.recordError}
+            </div>
+        </aura:if>
+        
+        <div class="slds-p-top_small">
+            <lightning:card>
+                <lightning:tabset aura:id="tabs" selectedTabId="{!v.selTabId}" onselect="{!c.handleTabSelect}">
+                    <lightning:tab label="HISTORY" id="historyTab">
+                        <aura:if isTrue="{!(empty(v.history))}">
+                            <div class="slds-text-heading--small slds-p-around_small">
+                                The selected student is not registered for any courses.
+                            </div>
+                            <aura:set attribute="else">
+                                <c:StudentHistory studentHistory="{!v.history}" />
+                            </aura:set>
+                        </aura:if> 
+                    </lightning:tab>
+                    <aura:if isTrue="{!not(empty(v.history))}">
+                        <lightning:tab label="EDIT NOTES" id="editNotesTab">
+                            <c:EditStudentNote courseAttendees="{!v.history}" />
+                        </lightning:tab>
+                    </aura:if>
+                </lightning:tabset>
+            </lightning:card>
+        </div>
+    </aura:if>
+</aura:component>

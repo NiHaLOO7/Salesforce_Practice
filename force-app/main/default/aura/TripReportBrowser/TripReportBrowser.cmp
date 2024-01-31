@@ -1,0 +1,51 @@
+<aura:component controller="TripReportBrowser" extends="c:Base" >
+    <aura:attribute name="tripReports" type="TripReport__c[]" access="private" />
+    <aura:attribute name="selectedRecordId" type="String" default="" /> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="ontripreportmodechange" type="c:TripReportModeChange" />
+    
+    <aura:handler name="rowclick" event="c:DataGridRowClick" action="{!c.onDataGridClick}"/>
+    <aura:handler name="rowdblclick" event="c:DataGridRowDblClick" action="{!c.onBtnEditClick}"/>
+    
+    <lightning:layout horizontalAlign="space" multipleRows="true">
+        
+        <lightning:layoutItem size="8">
+            <lightning:card title="Trip Reports">
+                <aura:set attribute="actions">
+                    <lightning:button label="New" variant="brand" onclick="{!c.onBtnNewClick}"/>
+                </aura:set>
+                <ui:scrollerWrapper class="scrollerSize">
+                    <c:DataGrid aura:Id="datagrid" data="{!v.tripReports}" pkField="Id">
+                        <c:DataGridColumn fieldName="Date__c" label="Date" hidden="true" />
+                        <c:DataGridColumn fieldName="Name" label="Name" />
+                        <c:DataGridColumn fieldName="ReviewType__c" label="Type" />
+                        <!-- doubt - fieldName="InstructorName" -->
+                        <c:DataGridColumn fieldName="InstructorName" label="Instructor" />
+                        <c:DataGridColumn fieldName="Rating__c" label="Rating" />
+                    </c:DataGrid>
+                </ui:scrollerWrapper>
+            </lightning:card>
+        </lightning:layoutItem>
+        
+        <lightning:layoutItem size="4" class="slds-p-left_large">
+            <aura:if isTrue="{!v.selectedRecordId != ''}">
+                <lightning:card title="Report Detail">
+                    <aura:set attribute="actions">
+                        <lightning:button label="Edit" variant="brand" onclick="{!c.onBtnEditClick}" />
+                    </aura:set>
+                    <div class="slds-p-left_large">
+                        <lightning:recordViewForm recordId="{!v.selectedRecordId}" objectApiName="TripReport__c">
+                            <lightning:outputField fieldName="Name" />
+                            <lightning:outputField fieldName="Date__c" />
+                            <lightning:outputField fieldName="ReviewType__c" />
+                            <lightning:outputField fieldName="Instructor__r.Name" />
+                            <lightning:outputField fieldName="Rating__c" />
+                            <lightning:outputField fieldName="Review__c" />
+                        </lightning:recordViewForm>
+                    </div>
+                </lightning:card>
+            </aura:if>
+        </lightning:layoutItem>
+        
+    </lightning:layout>
+</aura:component>

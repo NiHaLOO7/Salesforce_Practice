@@ -1,0 +1,65 @@
+<template>
+    <lightning-card  title="RI0003605 - Other">
+        
+            <lightning-accordion allow-multiple-sections-open
+            active-section-name={activeSections}>
+                <lightning-accordion-section name="A" label="Case Details">
+
+                    <lightning-record-view-form record-id={recordId} object-api-name="Case">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-2">
+                             <!--   <lightning-output-field field-name="Product__c"></lightning-output-field>
+                              -->  <lightning-output-field field-name="Partner_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="Account_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="TSYS_External_Account_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="Party_ID__c"></lightning-output-field>
+                                <lightning-output-field field-name="Partner_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="Name"></lightning-output-field>
+                                
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                              <!--  <lightning-output-field field-name="Product__c"></lightning-output-field>
+                                --><lightning-output-field field-name="Status"></lightning-output-field>
+                                <lightning-output-field field-name="Case_Assign_User_Name__c"></lightning-output-field>
+                                <lightning-output-field field-name="CreatedDate"></lightning-output-field>
+                                <lightning-output-field field-name="Update_Time__c"></lightning-output-field>
+                                <lightning-output-field field-name="Status"></lightning-output-field>
+                            
+                            </div>         
+                           
+                        </div>
+                    </lightning-record-view-form>
+                      
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="B" label="Case Input">
+                    
+                        <lightning-datatable
+                            hide-checkbox-column="true"
+                            key-field="Id"
+                            data={cases.data}
+                            columns={columns}>
+                        </lightning-datatable>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="C" label="Comments">
+                    <lightning-datatable
+                    hide-checkbox-column="true"
+                    key-field="Id"
+                    data={cases.data}
+                    columns={columns1}>
+                </lightning-datatable>
+                </lightning-accordion-section>
+
+                <lightning-accordion-section name="D" label="Attachments">
+                    <Div> Case attachments will come here</Div>  
+                </lightning-accordion-section>
+                
+            </lightning-accordion>
+     
+            <div class="slds-col slds-align_absolute-center">
+              <lightning-button class="slds-m-top_small slds-m-left_small" label="Done" variant="brand" onclick={handleDone}></lightning-button>
+            </div>
+
+    </lightning-card>
+</template>
